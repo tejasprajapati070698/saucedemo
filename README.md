@@ -223,6 +223,93 @@ Test data is stored in configuration files and includes:
 - Product information (names, prices, descriptions)
 - Checkout information (first name, last name, postal code)
 
+## 🤔 Test Automation Strategy
+
+### 2. What did you choose to automate, and why?
+
+I chose to automate the following critical user journeys and validations:
+
+**Login Functionality:**
+- **Login validation tests** (username required, password required) - These are fundamental security and UX validations that catch regressions early
+- **Locked user scenario** - Ensures proper error handling and security measures are working
+- **Successful login flow** - Validates the core authentication mechanism that gates all other functionality
+
+**Shopping Cart & Checkout Flow:**
+- **Add products to cart** - Core e-commerce functionality that directly impacts revenue
+- **Cart badge verification** - Validates UI state management and user feedback
+- **Checkout page navigation and form validation** - Critical conversion path that must work flawlessly
+- **Product details validation** - Ensures product information accuracy, which affects customer trust and purchasing decisions
+**User Session Management:**
+- **Logout functionality** - Validates proper session termination and security
+
+**Why these areas?**
+1. **High Business Impact**: These flows represent the critical path from login to checkout, directly affecting user experience and revenue
+2. **Regression Risk**: These are core functionalities that, if broken, would severely impact the application
+3. **User-Facing Features**: Focused on end-to-end user journeys rather than isolated unit tests
+
+### 3. What did you intentionally not automate, and why?
+
+I intentionally did not automate the following areas:
+
+**Complete Checkout Flow:**
+- **Order submission and payment processing** - The demo application doesn't have real payment integration, and testing payment gateways requires special test environments and credentials. In a real scenario, this would be tested separately with payment provider test modes.
+
+**Advanced Product Interactions:**
+- **Product sorting and filtering** - While important, these are secondary features that don't block core user journeys. They can be tested manually or added later as the test suite matures.
+- **Individual product detail pages** - The current tests validate product information on the listing page, which covers the essential data. Deep-diving into product pages would add complexity without proportional value for an initial test suite.
+
+**Edge Cases and Error Scenarios:**
+- **Checkout form validation errors** - Basic validation is covered, but exhaustive edge cases (invalid postal codes, special characters, etc.) would require extensive test data and maintenance overhead
+- **Network failure scenarios** - These are better handled through API-level testing or specialized tools
+- **Browser-specific edge cases** - Playwright runs on multiple browsers, but deep browser compatibility testing is better suited for dedicated compatibility testing tools
+
+**Additional User Types:**
+- **Problem user and performance glitch user scenarios** - While these users exist in the test data, automating their specific behaviors would require understanding their unique characteristics, which may be better suited for exploratory testing or specialized test scenarios
+
+
+**Why not automate these?**
+**Incremental Approach**: Start with critical paths, then expand based on actual needs and priorities
+
+### 4. If this were a production application, what would you change or add next?
+
+For a production application, I would prioritize the following enhancements:
+
+**1. Test Infrastructure & CI/CD Integration:**
+- **CI/CD Pipeline Integration**: Automate test execution on every commit/PR using GitHub Actions, Jenkins, or GitLab CI
+- **Test Reporting Dashboard**: Integrate with tools like Allure, TestRail, or custom dashboards for better visibility
+- **Parallel Execution Optimization**: Configure test sharding and parallel execution across multiple workers/machines
+- **Test Retry Logic**: Implement intelligent retry mechanisms for flaky tests with proper failure analysis
+
+**2. Enhanced Test Coverage:**
+- **Complete Checkout Flow**: Add tests for order submission, order confirmation, and order history
+- **API Testing**: Implement API-level tests using Playwright's API testing capabilities or tools like REST Assured
+- **Database Validation**: Add database assertions to verify data persistence and integrity
+- **Cross-browser Testing**: Expand browser coverage and add mobile browser testing
+
+**3. Test Data Management:**
+- **Dynamic Test Data Generation**: Use Faker.js or similar libraries to generate test data dynamically
+- **Test Data Cleanup**: Implement proper test data cleanup and isolation between test runs
+- **Test Environment Management**: Set up dedicated test environments with proper data seeding
+
+**4. Page Object Model (POM) Implementation:**
+- **Complete POM Refactoring**: Fully implement Page Object Model pattern (currently have page files but not fully utilized)
+- **Reusable Components**: Create reusable component classes for common UI elements (buttons, forms, modals)
+- **Action Methods**: Extract common actions into reusable methods to reduce code duplication
+
+
+**5. Test Maintenance & Quality:**
+- **Test Tagging & Categorization**: Implement test tags (smoke, regression, critical) for selective test execution
+- **Test Documentation**: Enhance test documentation with clear descriptions and business context
+- **Code Review Process**: Establish code review practices for test code
+- **Test Metrics & Analytics**: Track test execution metrics, failure rates, and flakiness
+
+
+**6. Integration & Collaboration:**
+- **Test Management Tool Integration**: Integrate with Jira, TestRail, or similar tools for test case management
+
+
+These enhancements would transform the test suite from a functional validation tool into a comprehensive quality assurance system that supports continuous delivery and provides confidence in production deployments.
+
 ## 🏗️ Best Practices
 
 ### 1. Locators

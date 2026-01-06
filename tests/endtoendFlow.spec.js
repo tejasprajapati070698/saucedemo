@@ -212,4 +212,34 @@ test.describe("End-to-End Flow", () => {
         console.log(`  [✓] T-Shirt Red: ${Config.testData.products.tShirtRed.name} - ${Config.testData.products.tShirtRed.price}`);
         console.log("[✓] Test passed: All product details validated successfully");
     });
+
+    test("Verify User Logout Is Successful", async ({ page }) => {
+        console.log("\n[TEST] Verify User Logout Is Successful");
+        // Step 1: Login to the application
+        console.log(`[STEP 1] Logging in with user: ${Config.testData.users.standard.username}`);
+        await page.fill(Locators.login.username, Config.testData.users.standard.username);
+        await page.fill(Locators.login.password, Config.testData.users.standard.password);
+        await page.click(Locators.login.loginButton);
+        await expect(page).toHaveURL(Config.urls.inventoryUrl);
+        console.log("[✓] Login successful");
+
+        // Step 2: Open hamburger menu
+        console.log("[STEP 2] Opening hamburger menu");
+        await page.click(Locators.menu.hamburgerButton);
+        await expect(page.locator(Locators.menu.menuContainer)).toBeVisible();
+        console.log("[✓] Hamburger menu opened");
+
+        // Step 3: Click logout button
+        console.log("[STEP 3] Clicking logout button");
+        await page.click(Locators.menu.menuItemLogout);
+        console.log("[✓] Logout button clicked");
+
+        // Step 4: Verify user is redirected to login page
+        console.log("[STEP 4] Verifying user is redirected to login page");
+        await expect(page).toHaveURL(Config.urls.baseUrl);
+        await expect(page.locator(Locators.login.username)).toBeVisible();
+        await expect(page.locator(Locators.login.password)).toBeVisible();
+        await expect(page.locator(Locators.login.loginButton)).toBeVisible();
+        console.log("[✓] Test passed: User successfully logged out and redirected to login page");
+    });
 });
