@@ -53,6 +53,24 @@ const Locators = {
         errorMessage: '[data-test="error"]'
     },
 
+    // Checkout Step Two Page Locators
+    checkoutStepTwo: {
+        cartItem: '.cart_item',
+        finishButton: '[data-test="finish"]',
+        cancelButton: '[data-test="cancel"]',
+        productName: '.inventory_item_name',
+        productPrice: '.inventory_item_price',
+        productDescription: '.inventory_item_desc'
+    },
+
+    // Checkout Complete Page Locators
+    checkoutComplete: {
+        completeHeader: '.complete-header',
+        completeText: '.complete-text',
+        backHomeButton: '[data-test="back-to-products"]',
+        ponyExpressImage: '.pony_express'
+    },
+
     // Hamburger Menu Locators
     menu: {
         hamburgerButton: '#react-burger-menu-btn',

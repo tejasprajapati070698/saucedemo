@@ -61,4 +61,3 @@ class ConfigLoader {
 // Export singleton instance
 const configLoader = new ConfigLoader();
 module.exports = configLoader.getConfig();
-

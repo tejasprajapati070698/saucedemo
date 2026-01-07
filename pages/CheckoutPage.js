@@ -125,6 +125,156 @@ class CheckoutPage {
     getErrorMessage() {
         return this.page.locator(Locators.checkout.errorMessage);
     }
+
+    /**
+     * Get cart items on checkout step two page
+     * @returns {Locator} Cart items locator
+     */
+    getCheckoutStepTwoCartItems() {
+        return this.page.locator(Locators.checkoutStepTwo.cartItem);
+    }
+
+    /**
+     * Verify all products are visible on checkout step two page
+     * @param {number} expectedCount - Expected number of products
+     */
+    async verifyAllProductsVisible(expectedCount) {
+        console.log(`[CheckoutPage] Verifying all ${expectedCount} products are visible on checkout step two page`);
+        const cartItems = this.getCheckoutStepTwoCartItems();
+        
+        // Verify the count matches expected
+        await expect(cartItems).toHaveCount(expectedCount);
+        console.log(`  [✓] Verified ${expectedCount} products are present`);
+        
+        // Verify each product is visible
+        const count = await cartItems.count();
+        for (let i = 0; i < count; i++) {
+            const item = cartItems.nth(i);
+            
+            // Verify product name is visible
+            const productName = item.locator(Locators.checkoutStepTwo.productName);
+            await expect(productName).toBeVisible();
+            
+            // Verify product price is visible
+            const productPrice = item.locator(Locators.checkoutStepTwo.productPrice);
+            await expect(productPrice).toBeVisible();
+            
+            // Verify product description is visible (if present)
+            const productDescription = item.locator(Locators.checkoutStepTwo.productDescription);
+            if (await productDescription.count() > 0) {
+                await expect(productDescription.first()).toBeVisible();
+            }
+            
+            const name = await productName.textContent();
+            const price = await productPrice.textContent();
+            console.log(`  [✓] Product ${i + 1}: ${name.trim()} - ${price.trim()}`);
+        }
+        
+        console.log(`[✓] All ${expectedCount} products are visible and validated`);
+    }
+
+    /**
+     * Click finish button on checkout step two page
+     */
+    async clickFinishButton() {
+        console.log("[CheckoutPage] Clicking finish button on checkout step two page");
+        await expect(this.page.locator(Locators.checkoutStepTwo.finishButton)).toBeVisible();
+        await this.page.click(Locators.checkoutStepTwo.finishButton);
+        console.log("[✓] Finish button clicked successfully");
+    }
+
+    /**
+     * Verify checkout step two page elements are visible
+     */
+    async verifyCheckoutStepTwoElements() {
+        console.log("[CheckoutPage] Verifying checkout step two page elements are visible");
+        await expect(this.page.locator(Locators.checkoutStepTwo.finishButton)).toBeVisible();
+        await expect(this.page.locator(Locators.checkoutStepTwo.cancelButton)).toBeVisible();
+        console.log("[✓] Checkout step two page elements are visible");
+    }
+
+    /**
+     * Verify checkout complete page elements are visible
+     */
+    async verifyCheckoutCompleteElements() {
+        console.log("[CheckoutPage] Verifying checkout complete page elements are visible");
+        
+        // Verify completion header (usually contains "Thank you for your order!")
+        await expect(this.page.locator(Locators.checkoutComplete.completeHeader)).toBeVisible();
+        console.log("  [✓] Completion header is visible");
+        
+        // Verify completion text/message
+        await expect(this.page.locator(Locators.checkoutComplete.completeText)).toBeVisible();
+        console.log("  [✓] Completion message is visible");
+        
+        // Verify back home button is visible
+        await expect(this.page.locator(Locators.checkoutComplete.backHomeButton)).toBeVisible();
+        console.log("  [✓] Back home button is visible");
+        
+        // Verify pony express image/icon is visible
+        await expect(this.page.locator(Locators.checkoutComplete.ponyExpressImage)).toBeVisible();
+        console.log("  [✓] Pony express image is visible");
+        
+        console.log("[✓] All checkout complete page elements are visible");
+    }
+
+    /**
+     * Verify checkout completion message text
+     * @param {string} expectedHeader - Expected header text (default: "Thank you for your order!")
+     */
+    async verifyCompletionHeader(expectedHeader = "Thank you for your order!") {
+        console.log(`[CheckoutPage] Verifying completion header text: "${expectedHeader}"`);
+        const header = this.page.locator(Locators.checkoutComplete.completeHeader);
+        await expect(header).toBeVisible();
+        await expect(header).toHaveText(expectedHeader);
+        console.log(`[✓] Completion header verified: "${expectedHeader}"`);
+    }
+
+    /**
+     * Verify checkout completion message text
+     * @param {string} expectedText - Expected completion message text
+     */
+    async verifyCompletionText(expectedText) {
+        console.log(`[CheckoutPage] Verifying completion message text`);
+        const textElement = this.page.locator(Locators.checkoutComplete.completeText);
+        await expect(textElement).toBeVisible();
+        if (expectedText) {
+            await expect(textElement).toContainText(expectedText);
+            console.log(`[✓] Completion message verified: contains "${expectedText}"`);
+        } else {
+            const text = await textElement.textContent();
+            console.log(`[✓] Completion message is visible: "${text.trim()}"`);
+        }
+    }
+
+    /**
+     * Validate checkout complete page
+     * Verifies all elements and messages on the checkout complete page
+     */
+    async validateCheckoutComplete() {
+        console.log("[CheckoutPage] Validating checkout complete page");
+        
+        // Verify all page elements are visible
+        await this.verifyCheckoutCompleteElements();
+        
+        // Verify completion header
+        await this.verifyCompletionHeader("Thank you for your order!");
+        
+        // Verify completion message
+        await this.verifyCompletionText("Your order has been dispatched");
+        
+        console.log("[✓] Checkout complete page validated successfully");
+    }
+
+    /**
+     * Click back home button on checkout complete page
+     */
+    async clickBackHomeButton() {
+        console.log("[CheckoutPage] Clicking back home button on checkout complete page");
+        await expect(this.page.locator(Locators.checkoutComplete.backHomeButton)).toBeVisible();
+        await this.page.click(Locators.checkoutComplete.backHomeButton);
+        console.log("[✓] Back home button clicked successfully");
+    }
 }
 
 module.exports = CheckoutPage;

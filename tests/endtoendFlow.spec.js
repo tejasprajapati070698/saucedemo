@@ -130,6 +130,38 @@ test.describe("End-to-End Flow", () => {
         console.log("[STEP 9] Verifying checkout information is filled correctly");
         await checkoutPage.verifyCheckoutInformation(Config.testData.checkout);
         console.log("[✓] Test passed: All products added to cart and checkout page validated successfully");
+
+        console.log("[STEP 10] Click on Continue Button");
+        await checkoutPage.clickContinueButton();
+        console.log("[✓] Test passed: Continue Button is Clicked Successfully");
+
+        // Step 11: Verify we're on checkout step two page
+        console.log("[STEP 11] Verifying navigation to checkout step two page");
+        await expect(page).toHaveURL(Config.urls.checkoutStepTwoUrl);
+        await checkoutPage.verifyCheckoutStepTwoElements();
+        console.log("[✓] Navigated to checkout step two page");
+
+        // Step 12: Verify all products are visible on checkout step two page
+        console.log("[STEP 12] Verifying all 6 products are visible on checkout step two page");
+        await checkoutPage.verifyAllProductsVisible(6);
+        console.log("[✓] All products are visible and validated");
+
+        // Step 13: Click finish button
+        console.log("[STEP 13] Clicking finish button");
+        await checkoutPage.clickFinishButton();
+        console.log("[✓] Finish button clicked successfully");
+
+        // Step 14: Verify navigation to checkout complete page
+        console.log("[STEP 14] Verifying navigation to checkout complete page");
+        await expect(page).toHaveURL(Config.urls.checkoutCompleteUrl);
+        console.log("[✓] Navigated to checkout complete page");
+
+        // Step 15: Validate checkout complete page
+        console.log("[STEP 15] Validating checkout complete page");
+        await checkoutPage.validateCheckoutComplete();
+        console.log("[✓] Checkout complete page validated successfully");
+        console.log("[✓] Test passed: Complete checkout flow validated successfully from products to order confirmation");
+
     });
 
     test("Validate Product Details for Each Product", async ({ page }) => {

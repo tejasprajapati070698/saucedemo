@@ -14,7 +14,15 @@ export default defineConfig({
     /* This will launch browsers in headed mode */
     headless: false, 
     
-    trace: 'on-first-retry',
+    /* Screenshots: Automatic screenshots on failure */
+    screenshot: 'only-on-failure',
+    
+    /* Video Recordings: Video of test execution */
+    video: 'retain-on-failure',
+    
+    /* Traces: Detailed execution traces for debugging */
+    trace: 'retain-on-failure',
+    
     /* You can also add launchOptions to slow down execution so you can see what's happening */
     // launchOptions: {
     //   slowMo: 500,
